@@ -7,9 +7,7 @@
 
 import UIKit
 
-struct charecter : Codable {
-    var fact : String
-}
+
 
 class ViewController: UIViewController {
 
@@ -19,31 +17,27 @@ class ViewController: UIViewController {
 
     }
     func getimg(){
-        var dogurl = URLComponents()
-          dogurl.scheme = "https"
-        dogurl.host = "dog-facts-api.herokuapp.com"
-        dogurl.path = "/api/v1/resources/dogs/all"
+        var itunesURL = URLComponents()
+        itunesURL.scheme = "https"
+        itunesURL.host = "api.spyse.com"
+        itunesURL.path = "/v4/data/domain/google.com"
         
-        let urlRequest = URLRequest(url: dogurl.url!)
+        let itunesRequestURL = itunesURL.url!
+        let itunesRequest = URLRequest(url: itunesRequestURL)
         
-        let urlSession = URLSession.shared
+        let urlSession = URLSessionConfiguration.default
+        urlSession.allowsCellularAccess = false
+        urlSession.httpShouldSetCookies = false
         
-        let task = urlSession.dataTask(with: urlRequest) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            do {
-                let jsonDecder = JSONDecoder()
-                let characters = try jsonDecder.decode([charecter].self, from: data!)
-                print(characters)
-            } catch {
-                print("Error fetcing the data: \(error)")
-            }
-            
+        let itunesSession = URLSession(configuration: urlSession)
+        
+        let fetchDataTask = itunesSession.dataTask(with: itunesRequest) {
+            (data: Data!, response: URLResponse?, err: Error?) in
+            print(String(data: data, encoding: .utf8))
         }
-        task.resume()
-    }
-  
-    
+        fetchDataTask.resume()
 
-
+        
 }
 
+}
